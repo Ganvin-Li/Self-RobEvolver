@@ -1,0 +1,25 @@
+# @package _global_
+
+# Bind episode partitions and simulator parameters through the environment integration.
+defaults:
+  - /habitat: habitat_config_base
+  - /habitat/task: vln_r2r
+  - /habitat/simulator/agents@habitat.simulator.agents.main_agent: rgbd_agent
+  - /habitat/dataset/vln: mp3d_r2r
+  - /habitat/task/lab_sensors:
+      - gps_sensor
+      - compass_sensor
+  - _self_
+habitat:
+  simulator:
+    agents:
+      main_agent:
+        sim_sensors:
+          rgb_sensor:
+            noise_model: OverexposureNoiseModel
+            noise_model_kwargs: {}
+  dataset:
+    type: R2RVLN-v1
+    split: null
+    scenes_dir: data/scene_datasets/
+    data_path: null

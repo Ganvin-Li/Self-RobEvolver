@@ -1,0 +1,4 @@
+# Supply the actual factor routes and dataset bindings; no illustrative task list is embedded.
+# Tasks 1--30 learn sequentially; tasks 31--40 are held out for inference only.
+training: []
+evaluation: []

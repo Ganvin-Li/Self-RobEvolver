@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lifelong Self-Evolving Robot Learning via Multi-Factor Tucker Adaptation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']],processEscapes:true,packages:{'[+]':['base','ams','boldsymbol']}},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']}};</script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root{--ink:#0f172a;--muted:#64748b;--brand:#4f46e5;--brand2:#7c3aed;--soft:#f7f8fc;--line:#e9ecf4;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--ink);background:#fff;line-height:1.7;-webkit-font-smoothing:antialiased;}
+    a{color:var(--brand);text-decoration:none;}
+    a:hover{text-decoration:underline;}
+    ::selection{background:#dfe4ff;color:#0b1020;}
+    .wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+    .narrow{max-width:820px;margin-left:auto;margin-right:auto;}
+    .hero{text-align:center;padding:58px 0 18px;background:radial-gradient(1200px 460px at 50% -150px,#eef0ff 0%,#fff 72%);}
+    .hero h1{font-size:2.55rem;font-weight:800;line-height:1.16;letter-spacing:-1px;max-width:980px;margin:0 auto 18px;color:#0b1020;}
+    .logos{max-width:1000px;margin:0 auto 26px;padding:0 10px;}
+    .logos img{width:80%;height:auto;display:block;margin: 0 auto;}
+    @media(max-width:760px){.badges{gap:5px;}.badge{font-size:10.5px;padding:4px 8px;}.logos{max-width:100%;margin-bottom:18px;}}
+    .authors{font-size:1.12rem;line-height:1.65;max-width:1300px;margin:2px auto 12px;}
+    .authors .au{color:#2563eb;font-weight:700;}
+    .authors a.au:hover{text-decoration:underline;}
+    .authors sup{color:#2563eb;font-weight:600;font-size:.66em;}
+    .authors .mem{font-style:italic;font-weight:500;color:#475569;font-size:.82em;}
+    .affils{color:#334155;font-size:.96rem;line-height:1.75;max-width:920px;margin:2px auto;}
+    .affils div{margin:1px 0;}
+    .affils sup{color:#334155;font-weight:700;}
+    .contrib{font-size:.9rem;color:var(--muted);font-style:italic;margin:10px 0 18px;}
+    .contrib sup{font-style:normal;}
+    .btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+    .btn{display:inline-flex;align-items:center;gap:9px;padding:12px 26px;border-radius:999px;font-weight:700;font-size:1rem;background:#111827;color:#fff;transition:.2s;}
+    .btn:hover{background:#0b1020;text-decoration:none;transform:translateY(-2px);box-shadow:0 10px 24px rgba(15,23,42,.22);}
+    .btn svg{width:19px;height:19px;fill:currentColor;}
+    .nav{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.9);backdrop-filter:saturate(160%) blur(12px);border-bottom:1px solid var(--line);}
+    .nav .wrap{display:flex;gap:2px;flex-wrap:wrap;justify-content:center;padding:6px 24px;}
+    .nav a{position:relative;padding:11px 16px;font-weight:600;font-size:.94rem;color:#475569;transition:color .15s;}
+    .nav a:hover{color:var(--brand);text-decoration:none;}
+    .nav a::after{content:"";position:absolute;left:16px;right:16px;bottom:6px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--brand),var(--brand2));transform:scaleX(0);transition:transform .18s ease;}
+    .nav a:hover::after{transform:scaleX(1);}
+    .nav a.active{color:var(--brand);}
+    .nav a.active::after{transform:scaleX(1);}
+    section{padding:46px 0;scroll-margin-top:62px;}
+    #overview{padding-top:26px;padding-bottom:38px;}
+    section.soft{background:var(--soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+    .h2{font-size:1.9rem;font-weight:800;text-align:center;letter-spacing:-.5px;margin-bottom:6px;}
+    .h2 .u{display:block;width:58px;height:4px;margin:14px auto 0;border-radius:4px;background:linear-gradient(90deg,var(--brand),var(--brand2));}
+    .lead{text-align:center;color:var(--muted);max-width:820px;margin:0 auto 30px;font-size:1.02rem;}
+    .h3{font-size:1.24rem;font-weight:700;margin:36px 0 10px;display:flex;align-items:center;gap:10px;}
+    .h3::before{content:"";width:5px;height:22px;border-radius:3px;background:linear-gradient(180deg,var(--brand),var(--brand2));}
+    .h3 .cnt{color:var(--muted);font-weight:500;font-size:.92rem;}
+    .fig{text-align:center;margin:16px auto;}
+    .fig img{max-width:100%;height:auto;border-radius:14px;border:1px solid var(--line);box-shadow:0 10px 34px rgba(20,20,60,.07);}
+    .cap{color:var(--muted);font-size:.95rem;max-width:960px;margin:12px auto 0;text-align:center;line-height:1.6;}
+    .abstract{font-size:1.05rem;color:#334155;text-align:justify;}
+    .math{color:var(--muted);font-size:.96rem;line-height:1.65;text-align:center;max-width:960px;margin:14px auto;}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;margin-top:16px;}
+    .vcard{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 4px 18px rgba(20,20,60,.05);transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;}
+    .vcard:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(20,20,60,.13);}
+    .vwrap{position:relative;width:100%;aspect-ratio:16/9;background:#0b1020;}
+    .vwrap video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;}
+    .tasktag{position:absolute;top:12px;left:12px;font-weight:800;font-size:.9rem;letter-spacing:.3px;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand2));padding:5px 13px;border-radius:999px;box-shadow:0 4px 12px rgba(79,70,229,.45);}
+    .speed{position:absolute;top:12px;right:12px;background:rgba(11,16,32,.7);color:#fff;font-size:12px;font-weight:600;padding:3px 9px;border-radius:6px;}
+    .vwrap.dual{display:flex;}
+    .vwrap.dual video{position:static;width:50%;height:100%;flex:0 0 50%;}
+    .vwrap video{cursor:pointer;}
+    .dctl{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:10px;padding:26px 14px 10px;background:linear-gradient(to top,rgba(0,0,0,.75),rgba(0,0,0,0));color:#fff;z-index:2;}
+    .dctl button{background:none;border:0;color:#fff;cursor:pointer;padding:2px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+    .dctl svg{width:22px;height:22px;fill:#fff;display:block;}
+    .dctl .i-pause{display:none;}
+    .dctl.playing .i-pause{display:block;}
+    .dctl.playing .i-play{display:none;}
+    .dseek{flex:1 1 auto;min-width:0;height:4px;accent-color:#fff;cursor:pointer;}
+    .dtime{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;flex:0 0 auto;}
+    .vwrap:fullscreen{aspect-ratio:auto;}
+    .vbody{padding:16px 18px 18px;}
+    .badges{display:flex;gap:7px;flex-wrap:nowrap;margin-bottom:10px;}
+    .badge{font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:999px;letter-spacing:.2px;white-space:nowrap;flex:0 0 auto;}
+    .type-VLN{background:#e0f2fe;color:#0369a1;}
+    .type-OLN{background:#fce7f3;color:#be185d;}
+    .type-DUN{background:#ede9fe;color:#6d28d9;}
+    .type-FRK{background:#ccfbf1;color:#0f766e;}
+    .type-UR5{background:#fef9c3;color:#a16207;}
+    .env-normal{background:#dcfce7;color:#15803d;}
+    .env-low{background:#dbeafe;color:#1d4ed8;}
+    .env-scatter{background:#fef3c7;color:#b45309;}
+    .env-over{background:#f3e8ff;color:#7e22ce;}
+    .badge.scene{background:#f1f5f9;color:#334155;font-family:'Inter',monospace;flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;}
+    .instr{color:#334155;font-size:.95rem;line-height:1.55;}
+    .ph{border:2px dashed #cdd4e8;border-radius:14px;padding:44px 20px;color:#8a93a8;text-align:center;font-size:.95rem;background:#fbfcff;}
+    .ph code{background:#eef0ff;color:var(--brand);padding:2px 7px;border-radius:6px;}
+    @media(max-width:760px){.hero h1{font-size:1.75rem;}.authors{font-size:1.05rem;}.grid{grid-template-columns:1fr;}.nav a{font-size:.85rem;padding:7px 11px;}}
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <h1>Lifelong Self-Evolving Robot Learning via Multi-Factor Tucker Adaptation</h1>
+      <div class="authors">
+        <a class="au" href="https://wangxudongsia.github.io" target="_blank" rel="noopener">Xudong Wang</a><sup><strong>*</strong>,1,3,4</sup>,
+        <span class="au">Gan Li</span><sup><strong>*</strong>,2</sup>,
+        <span class="au">Zhi Han</span><sup>&dagger;,3</sup>,
+        <span class="au">Chen Gao</span><sup>1,5</sup>,
+        <span class="au">Yue Liao</span><sup>1</sup>,
+        <span class="au">Haoyu Zhao</span><sup>1,6</sup>,
+        <span class="au">Dongyue Wang</span><sup>3,4</sup>,
+        <span class="au">Zhiyu Liu</span><sup>3</sup>,
+        <span class="au">Yao Wang</span><sup>7</sup>,
+        <span class="au">Ziyang Meng</span><sup>2</sup><span class="mem">, Senior Member, IEEE</span>,
+        <span class="au">Lianqing Liu</span><sup>3</sup><span class="mem">, Senior Member, IEEE</span>,
+        <span class="au">Si Liu</span><sup>5,8</sup><span class="mem">, Senior Member, IEEE</span>,
+        <span class="au">Shuicheng Yan</span><sup>1</sup><span class="mem">, Fellow, IEEE</span>
+      </div>
+      <div class="affils">
+        <div><sup>1</sup> School of Computing, National University of Singapore</div>
+        <div><sup>2</sup> Department of Precision Instruments, Tsinghua University</div>
+        <div><sup>3</sup> State Key Laboratory of Robotics and Intelligent Systems, Shenyang Institute of Automation, Chinese Academy of Sciences</div>
+        <div><sup>4</sup> University of Chinese Academy of Sciences</div>
+        <div><sup>5</sup> School of Artificial Intelligence, Beihang University</div>
+        <div><sup>6</sup> Institute of Trustworthy Embodied AI, Fudan University</div>
+        <div><sup>7</sup> Center for Intelligent Decision-making and Machine Learning, School of Management, Xi'an Jiaotong University</div>
+        <div><sup>8</sup> Hangzhou Innovation Institute, Beihang University</div>
+      </div>
+      <div class="contrib"><strong><sup>*</sup> Equal contribution. &nbsp; <sup>&dagger;</sup> Corresponding author.</strong></div>
+      <div class="logos">
+        <img src="static/school-logos.png" alt="Shenyang Institute of Automation, CAS · UCAS · NUS · Beihang University · Xi'an Jiaotong University">
+      </div>      
+      <div class="btns">
+        <a class="btn" href="#" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          Paper (Coming Soon)
+        </a>
+        <a class="btn" href="https://github.com/Ganvin-Li/Self-RobEvolver" target="_blank">
+          <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          Code
+        </a>
+      </div>
+    </div>
+  </header>
+  <nav class="nav">
+    <div class="wrap">
+      <a href="#overview">Overview</a>
+      <a href="#abstract">Abstract</a>
+      <a href="#method">Method</a>
+      <a href="#algorithms">Algorithms</a>
+      <a href="#benchmark">Benchmark</a>
+      <a href="#platform">Real-World</a>
+      <a href="#demos">Demonstrations</a>
+      <a href="#results">Results</a>
+    </div>
+  </nav>
+  <section id="overview">
+    <div class="wrap">
+      <figure class="fig">
+        <img src="static/F1.png" alt="">
+        <figcaption class="cap">Illustration of the proposed Lifelong Self-Evolving Robot Learning (LSERL) problem and the Self-RobEvolver framework. In a dynamic open world, robotic agents continually encounter robotic tasks involving four coupled knowledge factors: robot embodiments, scenes, environmental conditions, and instruction styles. Through autonomous on-policy interaction, Self-RobEvolver progressively acquires diverse robotic skills without additional human demonstrations (left). The acquired knowledge memory is decoupled, organized, and preserved through multi-factor Tucker adaptation (right). The on-policy skill acquisition and skill knowledge memorization combine to form the robotic co-evolving loop in the open world.</figcaption>
+      </figure>
+    </div>
+  </section>
+  <section id="abstract" class="soft">
+    <div class="wrap">
+      <h2 class="h2">Abstract<span class="u"></span></h2>
+      <div class="narrow"><p class="abstract">Recent vision-language-action models have significantly advanced embodied navigation and manipulation. However, existing robotic agents typically rely on human-provided demonstrations to acquire new skills, making it difficult to autonomously adapt to dynamic open-world environments while preserving previously learned knowledge. Moreover, robotic tasks are determined by multiple coupled factors, including robot embodiments, scenes, environmental conditions, and instruction styles, while existing task-level adaptation methods cannot explicitly disentangle such knowledge for flexible reuse. To address these limitations, we formulate a new problem, termed Lifelong Self-Evolving Robot Learning (LSERL), where a robotic agent continually improves from its own interaction experience while preserving and reusing previously acquired knowledge. To solve LSERL, we propose Self-RobEvolver, a unified framework that integrates Robotic On-Policy Self-Evolution (ROPSE) with multi-factor Tucker Adaptation (TuKA). ROPSE leverages realized future observations as privileged information to generate reliable self-distillation supervision. TuKA represents coupled robotic knowledge through high-order Tucker decomposition, disentangling different knowledge factors into structured memories and shared components. The ROPSE and TuKA combine to form the robotic co-evolving loop in the open world. Extensive experiments evaluate the effectiveness of Self-RobEvolver.</p></div>
+    </div>
+  </section>
+  <section id="method">
+    <div class="wrap">
+      <h2 class="h2">Method<span class="u"></span></h2>
+      <figure class="fig">
+        <img src="static/F2.png" alt="">
+        <figcaption class="cap">Overview of the proposed Self-RobEvolver framework. (a) Robotic On-Policy Self-Evolution (ROPSE) enables autonomous policy improvement from self-collected interaction experiences. (b) Memory with Multi-Factor Tucker Adaptation (TuKA) progressively disentangles the acquired robotic knowledge into four factor-specific memories, corresponding to robot embodiment, scene, environment, and instruction style. </figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="static/F3.png" alt="">
+        <figcaption class="cap">Illustration of the Memory with Multi-Factor Tucker Adaptation. TuKA performs decoupled knowledge memory with Factor-wise Knowledge Inheritance and Exploration, and refines the transferable shared knowledge with Progressively Expandable Shared Tucker Subspace.</figcaption>
+      </figure>
+  </section>
+<section id="algorithms" class="soft">
+    <div class="wrap">
+      <h2 class="h2">Algorithms<span class="u"></span></h2>
+      <p class="lead">The Self-RobEvolver training pipeline and inference pipeline.</p>
+      
+      <div class="grid" style="align-items: start; gap: 20px;">
+        <figure class="fig" style="margin-top: 0;">
+          <img src="static/algorithm1.png" alt="" style="max-width: 100%;" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <figcaption class="cap">Algorithm 1: Self-RobEvolver training pipeline.</figcaption>
+        </figure>
+        
+        <figure class="fig" style="margin-top: 0;">
+          <img src="static/algorithm2.png" alt="" style="max-width: 100%;" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <figcaption class="cap">Algorithm 2: Self-RobEvolver inference pipeline.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  <section id="benchmark">
+    <div class="wrap">
+      <h2 class="h2">LSERL Benchmark<span class="u"></span></h2>
+      <figure class="fig">
+        <img src="static/F4.png" alt="">
+        <figcaption class="cap">Illustration of the proposed LSERL benchmark. It comprises 40 multi-factor robotic navigation and manipulation tasks constructed from different combinations of robot embodiments (navigation agents, Franka Panda, and UR5e), scenes, environmental conditions (normal, low-light, overexposure, and scattering), and instruction styles (manipulation instructions, Vision-and-Language Navigation (VLN), Object Localization Navigation (OLN), and Dialogue-based Understanding Navigation (DUN)). The first 30 tasks are used for sequential self-evolution, while the remaining 10 tasks are held out to evaluate compositional generalization to unseen combinations of previously encountered factors.</figcaption>
+      </figure>
+      <h3 class="h3">Allday-Habitat Simulator</h3>
+      <figure class="fig">
+        <img src="static/F5.png" alt="">
+        <figcaption class="cap">Examples of navigation scenarios generated by the proposed Allday-Habitat simulator. The platform extends the standard Habitat simulator from normal visual conditions to diverse environmental degradations, including (a) normal, (b) low-light, (c) overexposure, and (d) scattering.</figcaption>
+      </figure>
+    </div>
+  </section>
+  <section id="platform" class="soft">
+    <div class="wrap">
+      <h2 class="h2">Real-World Robotic Platform<span class="u"></span></h2>
+      <figure class="fig">
+        <img src="static/F6.png" alt="" style="max-width:80%">
+        <figcaption class="cap">Illustration of developed real-world robotic navigation platforms.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="static/F7.png" alt="" style="max-width:80%">
+        <figcaption class="cap">Illustration of developed real-world robotic manipulation platforms.</figcaption>
+      </figure>
+    </div>
+  </section>
+  <section id="demos">
+    <div class="wrap">
+      <h2 class="h2">Experiment Demonstrations<span class="u"></span></h2>
+      <p class="lead">Task-wise rollouts across the 40-task LSERL benchmark, in order. Tasks 1&ndash;30 are learned sequentially (lifelong learning); Tasks 31&ndash;40 are held-out generalization tasks (inference only, not trained).</p>
+      <h3 class="h3">Lifelong Learning <span class="cnt">Tasks 1&ndash;30 &middot; continual learning</span></h3>
+      <div class="grid">
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-1.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 1</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-FRK" title="Franka Manipulation">Franka Manipulation</span>
+              <span class="badge env-scatter">Scattering</span>
+              <span class="badge scene" title="Place Wine On Rack">Place Wine On Rack</span>
+            </div>
+            <p class="instr">put the wine bottle on the rack.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-2.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 2</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-FRK" title="Franka Manipulation">Franka Manipulation</span>
+              <span class="badge env-low">Low Light</span>
+              <span class="badge scene" title="Open Drawer Store Bowl">Open Drawer Store Bowl</span>
+            </div>
+            <p class="instr">open the top drawer and put the bowl inside.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-3.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 3</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-VLN" title="Vision-and-Language Navigation">VLN</span>
+              <span class="badge env-scatter">Scattering</span>
+              <span class="badge scene" title="E9uDoFAP3SH">E9uDoFAP3SH</span>
+            </div>
+            <p class="instr">Walk into the room on the left. Walk past the table and then walk past the bed. Walk out of the room and wait in the doorway.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-4.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 4</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-DUN" title="Dialogue-based Understanding Navigation">DUN</span>
+              <span class="badge env-normal">Normal</span>
+              <span class="badge scene" title="2n8kARJN3HM">2n8kARJN3HM</span>
+            </div>
+            <p class="instr">Find the plant. Navigator: Do I go left or right on the stairs? Oracle: You're going to go up the right side of the stairs.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-5.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 5</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-VLN" title="Vision-and-Language Navigation">VLN</span>
+              <span class="badge env-low">Low Light</span>
+              <span class="badge scene" title="E9uDoFAP3SH">E9uDoFAP3SH</span>
+            </div>
+            <p class="instr">Turn to the left and walk on the rug, going past a few chairs and a end table.  When you get to the hallway, you can turn right and then go to where there is a door on the left and on the right.  Stop there.  Wait.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-6.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 6</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-FRK" title="Franka Manipulation">Franka Manipulation</span>
+              <span class="badge env-low">Low Light</span>
+              <span class="badge scene" title="Put Moka Pots On Stove">Put Moka Pots On Stove</span>
+            </div>
+            <p class="instr">put both moka pots on the stove.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-7.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 7</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-FRK" title="Franka Manipulation">Franka Manipulation</span>
+              <span class="badge env-scatter">Scattering</span>
+              <span class="badge scene" title="Put Sauce In Basket">Put Sauce In Basket</span>
+            </div>
+            <p class="instr">pick up the tomato sauce and place it in the basket.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-8.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 8</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-DUN" title="Dialogue-based Understanding Navigation">DUN</span>
+              <span class="badge env-normal">Normal</span>
+              <span class="badge scene" title="b8cTxDM8gDG">b8cTxDM8gDG</span>
+            </div>
+            <p class="instr">Find the book. Navigator: Should I go through the door in front of me? Oracle: Yes go through the door and keep going straight past spider man Navigator: Should I go through the door to the left of the window or continue? Oracle: Go straight then head down the stairs on your left Navigator: Should I go left or right at the bottom of the stairs? Oracle: Go right then go right again to the landing of the next set of stairs.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-9.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 9</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-DUN" title="Dialogue-based Understanding Navigation">DUN</span>
+              <span class="badge env-scatter">Scattering</span>
+              <span class="badge scene" title="uNb9QFRL6hY">uNb9QFRL6hY</span>
+            </div>
+            <p class="instr">Find the box. Navigator: where do I go from this room? Oracle: go left past the dining room table and up the steps by the front door Navigator: where do i go from the bathroom? Oracle: go forward then right and go down the first set of steps.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap dual" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-10-third_person.mp4" type="video/mp4">
+            </video>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-10-wrist.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 10</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-UR5" title="UR-5e Manipulation">UR-5e Manipulation</span>
+              <span class="badge env-normal">Normal</span>
+              <span class="badge scene" title="Close the first-aid kit">Close the first-aid kit</span>
+            </div>
+            <p class="instr">Please close the first-aid kit.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-11.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 11</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-OLN" title="Object Localization Navigation">OLN</span>
+              <span class="badge env-scatter">Scattering</span>
+              <span class="badge scene" title="EDJbREhghzL">EDJbREhghzL</span>
+            </div>
+            <p class="instr">Walk into the living room and fluff the blue pillow.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap dual" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-12-third_person.mp4" type="video/mp4">
+            </video>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-12-wrist.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 12</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-UR5" title="UR-5e Manipulation">UR-5e Manipulation</span>
+              <span class="badge env-normal">Normal</span>
+              <span class="badge scene" title="Grab the purple cube">Grab the purple cube</span>
+            </div>
+            <p class="instr">Please pick up the purple square and place it on top of the orange box.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-13.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 13</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-DUN" title="Dialogue-based Understanding Navigation">DUN</span>
+              <span class="badge env-over">Overexposure</span>
+              <span class="badge scene" title="EDJbREhghzL">EDJbREhghzL</span>
+            </div>
+            <p class="instr">Find the toiletpaper. Navigator: Hello, Do I move toward the exit sign? Oracle: go down along the building to the right of the exit sign.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-14.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 14</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-VLN" title="Vision-and-Language Navigation">VLN</span>
+              <span class="badge env-low">Low Light</span>
+              <span class="badge scene" title="Real-World 4">Real-World 4</span>
+            </div>
+            <p class="instr">Walk straight ahead, pass between the two orange cones, then through the cone-shaped barrels, and stop in front of the red ball.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-15.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 15</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-OLN" title="Object Localization Navigation">OLN</span>
+              <span class="badge env-normal">Normal</span>
+              <span class="badge scene" title="82sE5b5pLXE">82sE5b5pLXE</span>
+            </div>
+            <p class="instr">Go to the balcony on level 1 that has a swimming pool and bring me the tan pot in the middle.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-16.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 16</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-FRK" title="Franka Manipulation">Franka Manipulation</span>
+              <span class="badge env-normal">Normal</span>
+              <span class="badge scene" title="Put Moka Pots On Stove">Put Moka Pots On Stove</span>
+            </div>
+            <p class="instr">put both moka pots on the stove.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-17.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 17</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-VLN" title="Vision-and-Language Navigation">VLN</span>
+              <span class="badge env-scatter">Scattering</span>
+              <span class="badge scene" title="cV4RVeZvu5T">cV4RVeZvu5T</span>
+            </div>
+            <p class="instr">Exit living area, turn left head up stairs. Stop at the landing.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-18.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 18</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-VLN" title="Vision-and-Language Navigation">VLN</span>
+              <span class="badge env-over">Overexposure</span>
+              <span class="badge scene" title="1pXnuDYAj8r">1pXnuDYAj8r</span>
+            </div>
+            <p class="instr">Turn towards the right and walk past the blue chairs. Take a left after passing the second blue chair and follow the walkway by the rails. Take the stairs on the right. Walk down the first flight of stairs and stop at the top of the second flight.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-19.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 19</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-FRK" title="Franka Manipulation">Franka Manipulation</span>
+              <span class="badge env-over">Overexposure</span>
+              <span class="badge scene" title="Put Sauce In Basket">Put Sauce In Basket</span>
+            </div>
+            <p class="instr">pick up the tomato sauce and place it in the basket.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-20.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 20</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-VLN" title="Vision-and-Language Navigation">VLN</span>
+              <span class="badge env-normal">Normal</span>
+              <span class="badge scene" title="Real-World 3">Real-World 3</span>
+            </div>
+            <p class="instr">Walk forward to the blue cone, then pass through the right side after reaching it, go between the cones, and stop in front of the blue cone.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap dual" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-21-third_person.mp4" type="video/mp4">
+            </video>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-21-wrist.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 21</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-UR5" title="UR-5e Manipulation">UR-5e Manipulation</span>
+              <span class="badge env-low">Low Light</span>
+              <span class="badge scene" title="Close the first-aid kit">Close the first-aid kit</span>
+            </div>
+            <p class="instr">Please close the first-aid kit.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-22.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 22</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-OLN" title="Object Localization Navigation">OLN</span>
+              <span class="badge env-over">Overexposure</span>
+              <span class="badge scene" title="cV4RVeZvu5T">cV4RVeZvu5T</span>
+            </div>
+            <p class="instr">Go to the first floor family room and clean off the top of the table near the entry from the stairs.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-23.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 23</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-FRK" title="Franka Manipulation">Franka Manipulation</span>
+              <span class="badge env-scatter">Scattering</span>
+              <span class="badge scene" title="Put Moka Pots On Stove">Put Moka Pots On Stove</span>
+            </div>
+            <p class="instr">put both moka pots on the stove.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-24.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 24</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-VLN" title="Vision-and-Language Navigation">VLN</span>
+              <span class="badge env-normal">Normal</span>
+              <span class="badge scene" title="2n8kARJN3HM">2n8kARJN3HM</span>
+            </div>
+            <p class="instr">Go in the kitchen and out the other door.  Walk toward the stairs, and go down them, and wait inside the back door with a dark shelf next to it.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-25.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 25</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-DUN" title="Dialogue-based Understanding Navigation">DUN</span>
+              <span class="badge env-normal">Normal</span>
+              <span class="badge scene" title="uNb9QFRL6hY">uNb9QFRL6hY</span>
+            </div>
+            <p class="instr">Find the book. Navigator: Should I go left or continue up the stairs? Oracle: Actually, turn around, go down the steps behind you and go into the kitchen. Navigator: Should I go through the door? Oracle: No, that's not the kitchen. Turn around and go back into the hallway. Turn right and you will go into the kitchen. Keep going straight past the island.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-26.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 26</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-VLN" title="Vision-and-Language Navigation">VLN</span>
+              <span class="badge env-low">Low Light</span>
+              <span class="badge scene" title="Real-World 1">Real-World 1</span>
+            </div>
+            <p class="instr">Walk past the blue cone and the red ball, then look for the yellow ball hidden in the grass. Stop next to the yellow ball.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-27.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 27</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-FRK" title="Franka Manipulation">Franka Manipulation</span>
+              <span class="badge env-over">Overexposure</span>
+              <span class="badge scene" title="Open Drawer Store Bowl">Open Drawer Store Bowl</span>
+            </div>
+            <p class="instr">open the top drawer and put the bowl inside.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-28.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 28</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-VLN" title="Vision-and-Language Navigation">VLN</span>
+              <span class="badge env-low">Low Light</span>
+              <span class="badge scene" title="r1Q1Z4BcV1o">r1Q1Z4BcV1o</span>
+            </div>
+            <p class="instr">Leave the bathroom and take a right into the main room. Walk past the service buffet table  and stairs, and take the first right. Stop in front of the bench below the bridal room sign.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-29.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 29</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-OLN" title="Object Localization Navigation">OLN</span>
+              <span class="badge env-normal">Normal</span>
+              <span class="badge scene" title="Real-World 1">Real-World 1</span>
+            </div>
+            <p class="instr">Past the blue cone and the red ball, find the yellow ball hidden in the grass.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-30.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 30</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-FRK" title="Franka Manipulation">Franka Manipulation</span>
+              <span class="badge env-low">Low Light</span>
+              <span class="badge scene" title="Place Wine On Rack">Place Wine On Rack</span>
+            </div>
+            <p class="instr">put the wine bottle on the rack.</p>
+          </div>
+        </article>
+      </div>
+      <h3 class="h3">Generalization <span class="cnt">Tasks 31&ndash;40 &middot; held-out, inference only</span></h3>
+      <div class="grid">
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-31.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 31</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-DUN" title="Dialogue-based Understanding Navigation">DUN</span>
+              <span class="badge env-over">Overexposure</span>
+              <span class="badge scene" title="b8cTxDM8gDG">b8cTxDM8gDG</span>
+            </div>
+            <p class="instr">Find the statue. Navigator: Should I move toward the white couches? Oracle: Not the ones close to you on your left. Go forward toward the white chair and into that room. Navigator: up the stairs? Oracle: Yes.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-32.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 32</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-FRK" title="Franka Manipulation">Franka Manipulation</span>
+              <span class="badge env-over">Overexposure</span>
+              <span class="badge scene" title="Place Bowl On Plate">Place Bowl On Plate</span>
+            </div>
+            <p class="instr">pick up the black bowl on the stove and place it on the plate.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-33.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 33</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-OLN" title="Object Localization Navigation">OLN</span>
+              <span class="badge env-low">Low Light</span>
+              <span class="badge scene" title="1pXnuDYAj8r">1pXnuDYAj8r</span>
+            </div>
+            <p class="instr">Go to the hallway next to the office desks and bring me the picture nearest the desks.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-34.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 34</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-OLN" title="Object Localization Navigation">OLN</span>
+              <span class="badge env-over">Overexposure</span>
+              <span class="badge scene" title="82sE5b5pLXE">82sE5b5pLXE</span>
+            </div>
+            <p class="instr">Go to the outside hallway past the large wooden display cabinet and check if the pot nearest the door needs watering.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-35.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 35</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-VLN" title="Vision-and-Language Navigation">VLN</span>
+              <span class="badge env-scatter">Scattering</span>
+              <span class="badge scene" title="1pXnuDYAj8r">1pXnuDYAj8r</span>
+            </div>
+            <p class="instr">Pass the couches then turn right. Pass the stairs and continue straight until you get to a bedroom. Wait at the entrance.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap dual" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-36-third_person.mp4" type="video/mp4">
+            </video>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-36-wrist.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 36</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-UR5" title="UR-5e Manipulation">UR-5e Manipulation</span>
+              <span class="badge env-normal">Normal</span>
+              <span class="badge scene" title="Clamp building block">Clamp building block</span>
+            </div>
+            <p class="instr">Pick up the cylindrical wooden block and place it in the box</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-37.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 37</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-OLN" title="Object Localization Navigation">OLN</span>
+              <span class="badge env-normal">Normal</span>
+              <span class="badge scene" title="r1Q1Z4BcV1o">r1Q1Z4BcV1o</span>
+            </div>
+            <p class="instr">Go all the way to the end of the dining hall near the bar and bring one of the chairs closest to the bar area.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-38.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 38</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-DUN" title="Dialogue-based Understanding Navigation">DUN</span>
+              <span class="badge env-normal">Normal</span>
+              <span class="badge scene" title="Real-World 4">Real-World 4</span>
+            </div>
+            <p class="instr">Find the yellow hemisphere. Navigator: Which way should we go now? Oracle: Go forward, pass the yellow and blue cones on the left, then go forward and stop at the yellow hemisphere.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap dual" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-39-third_person.mp4" type="video/mp4">
+            </video>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-39-wrist.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 39</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-UR5" title="UR-5e Manipulation">UR-5e Manipulation</span>
+              <span class="badge env-low">Low Light</span>
+              <span class="badge scene" title="Grab the purple cube">Grab the purple cube</span>
+            </div>
+            <p class="instr">Please pick up the purple square and place it on top of the orange box.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vwrap" data-autoplay>
+            <video preload="metadata" playsinline muted>
+              <source src="static/video/Task-40.mp4" type="video/mp4">
+            </video>
+            <div class="dctl">
+              <button type="button" class="dplay" aria-label="Play / Pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+              <input class="dseek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="dtime">0:00 / 0:00</span>
+              <button type="button" class="dfs" aria-label="Fullscreen"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+            </div>
+            <span class="tasktag">Task 40</span>
+          </div>
+          <div class="vbody">
+            <div class="badges">
+              <span class="badge type-VLN" title="Vision-and-Language Navigation">VLN</span>
+              <span class="badge env-low">Low Light</span>
+              <span class="badge scene" title="Real-World 3">Real-World 3</span>
+            </div>
+            <p class="instr">Walk forward and keep the red cone on your left as you pass it. Continue straight along the path of cones until you reach the end. Stop right in front of the yellow cone.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+  <section id="results" class="soft">
+    <div class="wrap">
+      <h2 class="h2">Experimental Results<span class="u"></span></h2>
+      <p class="lead">Self-RobEvolver consistently outperforms state-of-the-art baselines under the LSERL setting.</p>
+      <figure class="fig">
+        <img src="static/result_sr.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <figcaption class="cap">Task-wise comparison of SR $\uparrow$ % on the LSERL benchmark. CL denotes the 30 lifelong learning tasks, US denotes the 10 unseen factor-combination tasks, and All denotes the overall average.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="static/result_fsr.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <figcaption class="cap">Task-wise comparison of F-SR $\downarrow$ % on the LSERL benchmark. $^\dagger$ denotes the relative performance gap between the lifelong model and an independently self-evolved task-specific reference on unseen factor combinations (T31--T40), rather than forgetting</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="static/result_er.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <figcaption class="cap">Task-wise comparison of ER $\uparrow$ % on the LSERL benchmark. CL denotes the 30 lifelong learning tasks, US denotes the 10 unseen factor-combination tasks, and All denotes the overall average.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="static/F8.png" alt="" style="max-width: 60%; height: auto; display: block; margin: 0 auto;">
+        <figcaption class="cap">Radar chart of SPL, F-SPL, ER-SPL, OSR, F-OSR, and ER-OSR.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="static/F9.png" alt="" style="display: block; width: 110%; max-width: none; height: auto; position: relative; left: 50%; transform: translateX(-50%);">
+        <figcaption class="cap">Comparison between the UniVLA baseline (zero-shot performance) and our Self-RobEvolver on the LSERL benchmark.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="static/F10.png" alt="" style="display: block; width: 50%; max-width: none; height: auto; position: relative; left: 50%; transform: translateX(-50%);">
+        <figcaption class="cap">Analysis of lifelong co-evolution under two order settings.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="static/F11.png" alt="" style="display: block; width: 60%; max-width: none; height: auto; position: relative; left: 50%; transform: translateX(-50%);">
+        <figcaption class="cap">Comparison of iterative self-evolution dynamics among different autonomous robotic learning methods on the LSERL benchmark. The horizontal axis denotes the number of on-policy self-evolution rounds, while the vertical axis represents the average Success Rate (SR) across the 30 lifelong learning tasks. All methods employ the same UniVLA backbone and TuKA memory, enabling a direct comparison of their autonomous policy improvement capabilities.</figcaption>
+      </figure>
+    </div>
+  </section>
+  <div style="height:52px"></div>
+  <script>
+  (function(){
+    function fmt(t){t=Math.max(0,t||0);var m=Math.floor(t/60),x=Math.floor(t%60);return m+':'+(x<10?'0':'')+x;}
+    document.querySelectorAll('.vwrap').forEach(function(w){
+      var ctl=w.querySelector('.dctl');if(!ctl)return;
+      var vs=Array.prototype.slice.call(w.querySelectorAll('video'));
+      var btn=w.querySelector('.dplay'),seek=w.querySelector('.dseek'),time=w.querySelector('.dtime'),fs=w.querySelector('.dfs');
+      var dragging=false,want=false;
+      function d(v){return isFinite(v.duration)?(v.duration||0):0;}
+      function master(){return vs.reduce(function(m,v){return d(v)>d(m)?v:m;},vs[0]);}
+      function dur(){return d(master());}
+      function ui(){
+        var du=dur(),t=master().currentTime;
+        time.textContent=fmt(t)+' / '+fmt(du);
+        if(!dragging)seek.value=du?Math.round(t/du*1000):0;
+      }
+      function setState(){ctl.classList.toggle('playing',want&&!master().ended);}
+      // start every clip that has data; hold back while any clip is still buffering
+      function resume(){
+        if(!want)return;
+        var live=vs.filter(function(v){return !v.ended;});
+        if(!live.every(function(v){return v.readyState>=3;}))return;
+        live.forEach(function(v){if(v.paused)v.play().catch(function(){});});
+      }
+      function playAll(){
+        var m=master(),restart=false;
+        if(m.ended||(dur()&&m.currentTime>=dur()-0.05)){restart=true;vs.forEach(function(v){v.currentTime=0;});}
+        want=true;setState();
+        vs.forEach(function(v){
+          if(v.ended&&!restart)return;
+          var p=v.play();
+          if(p&&p.catch)p.catch(function(e){if(e&&e.name==='AbortError')return;if(vs.every(function(x){return x.paused;})){want=false;setState();}});
+        });
+      }
+      function pauseAll(){want=false;vs.forEach(function(v){v.pause();});setState();}
+      function toggle(){(want&&!master().ended)?pauseAll():playAll();}
+      btn.addEventListener('click',toggle);
+      vs.forEach(function(v){
+        v.addEventListener('click',toggle);
+        v.addEventListener('loadedmetadata',ui);
+        v.addEventListener('waiting',function(){
+          if(!want||v.ended)return;
+          vs.forEach(function(o){if(o!==v&&!o.paused&&!o.ended)o.pause();});
+        });
+        v.addEventListener('playing',resume);
+        v.addEventListener('canplay',resume);
+        v.addEventListener('seeked',resume);
+        v.addEventListener('timeupdate',function(){
+          if(v!==master())return;
+          if(want){vs.forEach(function(o){
+            if(o!==v&&!o.ended&&!o.seeking&&Math.abs(o.currentTime-v.currentTime)>1&&v.currentTime<(o.duration||Infinity))o.currentTime=v.currentTime;
+          });}
+          ui();
+        });
+        v.addEventListener('ended',function(){if(v===master()){want=false;setState();ui();}});
+      });
+      seek.addEventListener('input',function(){
+        dragging=true;
+        var t=seek.value/1000*dur();
+        vs.forEach(function(v){v.currentTime=Math.min(t,v.duration||t);});
+        time.textContent=fmt(t)+' / '+fmt(dur());
+      });
+      seek.addEventListener('change',function(){dragging=false;ui();});
+      fs.addEventListener('click',function(){
+        if(document.fullscreenElement){document.exitFullscreen();}
+        else if(w.requestFullscreen){w.requestFullscreen();}
+      });
+      // autoplay once (muted) when the card scrolls into view; stops at the end
+      if(w.hasAttribute('data-autoplay')){
+        vs.forEach(function(v){v.muted=true;});
+        if('IntersectionObserver' in window){
+          var io=new IntersectionObserver(function(es){
+            es.forEach(function(e){
+              if(e.isIntersecting&&e.intersectionRatio>=0.5){io.unobserve(w);playAll();}
+            });
+          },{threshold:[0.5]});
+          io.observe(w);
+        }else{playAll();}
+      }
+    });
+  })();
+  </script>
+</body>
+</html>

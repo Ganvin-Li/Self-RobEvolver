@@ -1,0 +1,67 @@
+adapter:
+  projections: [q_proj, v_proj]
+  # Modes: output, input, embodiment, scene, environment, instruction style.
+  ranks: [12, 12, 3, 6, 3, 3]
+  growth: [1, 1, 1, 1, 1, 1]
+  scale: 1.0
+
+optimization:
+  # Unreported run-specific values must be supplied explicitly.
+  updates_per_task: null
+  learning_rate: 1.0e-5
+  min_learning_rate: 1.0e-6
+  weight_decay: null
+
+ropse:
+  gamma: null
+  min_progress: null
+  min_confidence: null
+
+regularization:
+  lambda_orth: 0.0001
+  lambda_cons: 0.01
+  lambda_fisher: 0.01
+  fisher_smoothing: 0.9
+
+policy:
+  backbone: UniVLA
+  checkpoint: null
+  freeze_backbone: true
+  freeze_action_heads: true
+  action_heads:
+    navigation: null
+    franka: null
+    ur5e: null
+
+runtime:
+  device: cuda:0
+  # Worker placement is implemented by the external bridge.
+  rollout_gpu_ids: [0, 1, 2, 3]
+
+retrieval:
+  encoder: CLIP
+  checkpoint: null
+  normalize_features: true
+
+navigation:
+  dataset_roots:
+    VLN: data/datasets/r2r
+    OLN: data/datasets/reverie
+    DUN: data/datasets/ndh
+  scenes_dir: data/scene_datasets
+  environment_configs:
+    Normal: config/normal.yaml
+    Low_Light: config/night.yaml
+    Overexposure: config/overexposure.yaml
+    Scattering: config/smog.yaml
+
+manipulation:
+  franka:
+    backend: libero
+    assets_root: data/libero
+    task_suite: null
+    max_episode_steps: null
+  ur5e:
+    backend: robot_bridge
+    calibration_file: null
+    max_episode_steps: null
