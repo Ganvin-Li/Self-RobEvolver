@@ -96,6 +96,15 @@
     .ph{border:2px dashed #cdd4e8;border-radius:14px;padding:44px 20px;color:#8a93a8;text-align:center;font-size:.95rem;background:#fbfcff;}
     .ph code{background:#eef0ff;color:var(--brand);padding:2px 7px;border-radius:6px;}
     @media(max-width:760px){.hero h1{font-size:1.75rem;}.authors{font-size:1.05rem;}.grid{grid-template-columns:1fr;}.nav a{font-size:.85rem;padding:7px 11px;}}
+    .pv{max-width:1040px;margin:56px auto 0;}
+    .pv .h2{margin-bottom:26px;}
+    .pv-frame{position:relative;padding:8px;border-radius:20px;background:linear-gradient(135deg,rgba(79,70,229,.55),rgba(124,58,237,.55));box-shadow:0 18px 50px -18px rgba(79,70,229,.45),0 6px 18px rgba(15,23,42,.08);cursor:pointer;}
+    .pv-frame video{display:block;width:100%;aspect-ratio:16/9;border-radius:13px;background:#0b1020;object-fit:contain;outline:none;}
+    .pv-btn{position:absolute;left:50%;top:50%;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;border:0;background:rgba(255,255,255,.92);box-shadow:0 8px 28px rgba(15,23,42,.3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .2s,opacity .25s;}
+    .pv-btn:hover{transform:scale(1.08);}
+    .pv-btn svg{width:30px;height:30px;margin-left:4px;fill:var(--brand);}
+    .pv-frame.playing .pv-btn{opacity:0;pointer-events:none;}
+    @media(max-width:760px){.pv{margin-top:40px;}.pv-frame{padding:5px;border-radius:15px;}.pv-frame video{border-radius:10px;}.pv-btn{width:58px;height:58px;margin:-29px 0 0 -29px;}.pv-btn svg{width:24px;height:24px;}}
   </style>
 </head>
 <body>
@@ -132,13 +141,13 @@
         <img src="static/school-logos.png" alt="Shenyang Institute of Automation, CAS · UCAS · NUS · Beihang University · Xi'an Jiaotong University">
       </div>      
       <div class="btns">
-        <a class="btn" href="#" target="_blank">
+        <!-- <a class="btn" href="#" target="_blank">
           <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
           Paper (Coming Soon)
-        </a>
+        </a> -->
         <a class="btn" href="https://github.com/Ganvin-Li/Self-RobEvolver" target="_blank">
           <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-          Code
+          Code Resource
         </a>
       </div>
     </div>
@@ -161,6 +170,29 @@
         <img src="static/F1.png" alt="">
         <figcaption class="cap">Illustration of the proposed Lifelong Self-Evolving Robot Learning (LSERL) problem and the Self-RobEvolver framework. In a dynamic open world, robotic agents continually encounter robotic tasks involving four coupled knowledge factors: robot embodiments, scenes, environmental conditions, and instruction styles. Through autonomous on-policy interaction, Self-RobEvolver progressively acquires diverse robotic skills without additional human demonstrations (left). The acquired knowledge memory is decoupled, organized, and preserved through multi-factor Tucker adaptation (right). The on-policy skill acquisition and skill knowledge memorization combine to form the robotic co-evolving loop in the open world.</figcaption>
       </figure>
+      <div class="pv">
+        <h2 class="h2">Video<span class="u"></span></h2>
+        <div class="pv-frame" id="pvFrame">
+          <video id="paperVideo" src="static/video.mp4#t=8" playsinline preload="auto"></video>
+          <button class="pv-btn" type="button" aria-label="Play video"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+        </div>
+      </div>
+      <script>
+      (function(){
+        var v=document.getElementById('paperVideo'),f=document.getElementById('pvFrame');if(!v||!f)return;
+        var started=false;
+        function park(){try{if(!started)v.currentTime=8;}catch(e){}}
+        v.addEventListener('loadedmetadata',park);
+        v.addEventListener('loadeddata',park);
+        v.addEventListener('play',function(){
+          if(!started){started=true;if(Math.abs(v.currentTime-8)<0.5)v.currentTime=0;}
+          f.classList.add('playing');
+        });
+        v.addEventListener('pause',function(){f.classList.remove('playing');});
+        v.addEventListener('ended',function(){f.classList.remove('playing');});
+        f.addEventListener('click',function(){if(v.paused){v.play();}else{v.pause();}});
+      })();
+      </script>
     </div>
   </section>
   <section id="abstract" class="soft">
@@ -206,7 +238,7 @@
         <img src="static/F4.png" alt="">
         <figcaption class="cap">Illustration of the proposed LSERL benchmark. It comprises 40 multi-factor robotic navigation and manipulation tasks constructed from different combinations of robot embodiments (navigation agents, Franka Panda, and UR5e), scenes, environmental conditions (normal, low-light, overexposure, and scattering), and instruction styles (manipulation instructions, Vision-and-Language Navigation (VLN), Object Localization Navigation (OLN), and Dialogue-based Understanding Navigation (DUN)). The first 30 tasks are used for sequential self-evolution, while the remaining 10 tasks are held out to evaluate compositional generalization to unseen combinations of previously encountered factors.</figcaption>
       </figure>
-      <h3 class="h3">Allday-Habitat Simulator</h3>
+      <h3 class="h3">Multi-Domain All-Day Simulator</h3>
       <figure class="fig">
         <img src="static/F5.png" alt="">
         <figcaption class="cap">Examples of navigation scenarios generated by the proposed Allday-Habitat simulator. The platform extends the standard Habitat simulator from normal visual conditions to diverse environmental degradations, including (a) normal, (b) low-light, (c) overexposure, and (d) scattering.</figcaption>
